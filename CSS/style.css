@@ -117,3 +117,25 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
+  .news-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-top: 1px solid #EDEDED;
+    padding-top: 16px;
+  }
+  .news-card img {
+    width: 90px;
+    height: 60px;
+    object-fit: cover;
+  }
+  .news-card h6 {
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin: 0;
+    line-height: 1.2;
+    
+  }
+  .news-card:hover h6 {
+    text-decoration: underline;
+  }

@@ -193,3 +193,71 @@
 
     container.innerHTML = temp.map(renderArticle).join('');
   });
+
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const trending = [
+      {
+        title: "Scientists Identify Molten Layer Deep Within Interior of Mars",
+        image: "Assets/trending1.png",
+      },
+      {
+        title: "Speciality Chemicals Manufacturer and Global Distributor, Devine Chemicals has doubled the size of its head office and opened a research centre.",
+        image: "Assets/trending2.png",
+      },
+      {
+        title: "Neuron E-scooter Access in Saskatoon Stops as Cold Weather Rolls In",
+        image: "Assets/trending3.png",
+      },
+      {
+        title: "Civilizations are Probably Spreading Quickly Through the Universe",
+        image: "Assets/trending4.png",
+      },
+      {
+        title: "Chemistry Study Improves Method to Measure Vibrations of Solids",
+        image: "Assets/trending5.png",
+      },
+      {
+        title: "Qualcomm's Powerful Snapdragon X Elite Processor Scores Partnerships from More leading laptop OEMs",
+        image: "Assets/trending6.png",
+      },
+      {
+        title: "Researchers Identify Metals Released into the Atmosphere by Satellite Reentry",
+        image: "Assets/trending7.png",
+      },
+      {
+        title: "Human Powered Health adds 'pure climber' Doebel-Hickok for 2024",
+        image: "Assets/trending8.png",
+      },
+      {
+        title: "Indonesia Ranks Low on Internet Speed, Free Trial Rides on 'Whoosh' High-speed Train Extended",
+        image: "Assets/trending9.png",
+      },
+      {
+        title: "SpaceX Falcon 9 Launches 23 Starlink Satellites from Cape Canaveral",
+        image: "Assets/trending10.png",
+      },
+      {
+        title: "Source of Raw Milk Causing Illness Found, Health Officials Report",
+        image: "Assets/trending11.png",
+      },
+      {
+        title: "You Need to Know About These 3 New Features on the iPhone 15 Pro and 15 Pro Max",
+        image: "Assets/trending12.png",
+      }
+      ];
+      const trendingContainer = document.getElementById("trending-articles");
+
+      function renderTrendingArticle(trending) {
+        return `
+          <div class="col-md-4 col-sm-6">
+            <div class="news-card">
+              <img src="${trending.image}" alt="News Image">
+              <p class="paragraph-text-light truncate-2-lines">${trending.title}</p>
+            </div>
+          </div>
+        `;
+      }
+      
+      trendingContainer.innerHTML = trending.map(renderTrendingArticle).join('');
+  });
