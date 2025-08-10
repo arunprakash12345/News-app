@@ -82,11 +82,11 @@ document.addEventListener('DOMContentLoaded', () => {
       return `
         <div class="col-md-4 col-sm-6">
           <div class="news-card">
-            <a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">
+            <a class="a" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">
               <img src="${escapeHtml(image)}" alt="${title}">
             </a>
             <p class="paragraph-text-light truncate-2-lines">
-              <a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${title}</a>
+              <a class="a" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${title}</a>
             </p>
           </div>
         </div>

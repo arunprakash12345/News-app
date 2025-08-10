@@ -1,98 +1,91 @@
 // newest-dev.js
-// This script fetches latest newest news using NewsAPI (for dev/testing)
-// I’m using my personal API key here, but in real deployment I’ll keep it hidden in backend.
+// Fetches newest news articles (frontend dev version — for production, use backend to hide API key)
 
-// Wait until the page DOM is fully loaded before running
 document.addEventListener('DOMContentLoaded', () => {
 
-    // My NewsAPI key (⚠️ don’t expose this in production!)
-    const API_KEY = 'b1f158578adb4fdd8a4789cecf213ed9';
-
-    // This is where the news cards will be injected
+    //  Include all params directly here so no double "?"
+    const API_URL = `https://newsapi.org/v2/top-headlines?country=us&category=technology&pageSize=4&apiKey=b1f158578adb4fdd8a4789cecf213ed9`;
+  
+    // Container for news cards
     const container = document.getElementById('newest-articles');
-
-    // Fallback image (local PNG) if article has no image
+  
+    // Fallback image if article has no image
     const FALLBACK_IMG = 'Assets/newest1.png';
-
-    // ---- Function: Escape any HTML in strings ----
-    // Why? To avoid malicious code from running if API sends weird input
+  
+    // Escape HTML to avoid malicious injection
     function escapeHtml(str) {
       if (!str) return '';
       return str
-        .replace(/&/g, '&amp;')   // & becomes &amp;
-        .replace(/</g, '&lt;')    // < becomes &lt;
-        .replace(/>/g, '&gt;')    // > becomes &gt;
-        .replace(/"/g, '&quot;')  // " becomes &quot;
-        .replace(/'/g, '&#039;'); // ' becomes &#039;
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
     }
-
-    // ---- Main Function: Load newest articles ----
+  
+    // Main function to load newest articles
     async function loadNewest() {
-
-      // While fetching, show a loading message
       container.innerHTML = '<div class="text-center py-4">Loading newest news…</div>';
-
+  
       try {
-        // Build API URL — getting top headlines from US, limiting to 4
-        const url = `https://newsapi.org/v2/top-headlines?country=us&pageSize=12&apiKey=${API_KEY}`;
-
-        // Call the API
-        const response = await fetch(url);
-
-        // If the server responds with an error status
-        if (!response.ok) throw new Error('Network response not ok: ' + response.status);
-
-        // Convert JSON into usable JS object
+        const response = await fetch(API_URL);
+  
+        if (!response.ok) throw new Error(`Network error: ${response.status}`);
+  
         const data = await response.json();
-
-        // NewsAPI sometimes returns more — slice to only 4 for layout
-        const articles = (data.articles || []).slice(0, 4);
-
-        // If nothing is returned, show a friendly message
+        console.log("NewsAPI data:", data); // 👀 See what the API sends
+  
+        const articles = data?.articles || [];
+  
         if (articles.length === 0) {
           container.innerHTML = '<p>No trending articles right now.</p>';
           return;
         }
-
-        // Otherwise, render each article as a card
+  
+        // Render articles
         container.innerHTML = articles.map(renderCard).join('');
-
+  
       } catch (err) {
-        // If the fetch fails (offline, API down, etc.)
         console.error('Fetch error', err);
-
-        // Show an error + retry button
         container.innerHTML = `
           <div class="text-center py-4">
             <p class="text-danger">Could not load news. Please try again.</p>
             <button id="tryAgain" class="btn btn-link">Try again</button>
           </div>`;
-
-        // When user clicks retry, try again
         document.getElementById('tryAgain').addEventListener('click', loadNewest);
       }
     }
-
-    // ---- Function: Convert article object into HTML card ----
+  
+    // Convert article object into HTML card
     function renderCard(a) {
-      const title = escapeHtml(a.title || 'Untitled'); // protect + fallback
-      const image = a.urlToImage || FALLBACK_IMG;      // fallback to local PNG
-      const url = a.url || '#';                        // if no link, keep dummy
-
+      const title = escapeHtml(a?.title || 'Untitled');
+      const image = escapeHtml(a?.urlToImage || FALLBACK_IMG);
+      const url = a?.url || '#';
+      const category = escapeHtml(a?.category || 'General');
+      const readTime = escapeHtml(a?.readTime || '5 mins read');
+      const para = escapeHtml(a?.description || 'No description available.');
+  
       return `
-        <div class="col-md-4 col-sm-6">
-          <div class="news-card">
-            <a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">
-              <img src="${escapeHtml(image)}" alt="${title}">
-            </a>
-            <p class="paragraph-text-light truncate-2-lines">
-              <a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${title}</a>
-            </p>
-          </div>
-        </div>
+        <div class="col-lg-3 col-md-6">
+      <div class="ratio ratio-16x9 overflow-hidden">
+        <img src="${image}" loading="lazy" class="w-100 h-100 object-fit-cover" alt="${title}" />
+      </div>
+
+      <h5 class="line-height mt-3 truncate-2-lines">
+      <a class="truncate-2-lines" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${title}</a>
+      </h5>
+       <p class="paragraph-text-light truncate-2-lines">
+              <a class="truncate-2-lines"  href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${para}</a>
+       </p> 
+      <div class="d-flex align-items-center">
+        <div class="meta-item"><p style="color: black;" class="meta-text mb-0">${category}</p></div>
+        <div class="meta-divider"><p style="color: black;" class="meta-text mb-0">${readTime}</p></div>
+      </div> 
+    </div>
       `;
     }
-
-    // Kick off the first fetch when the page loads
+  
+    // Load on page start
     loadNewest();
-});
+  });
+  
