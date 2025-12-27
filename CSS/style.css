@@ -136,7 +136,7 @@
     margin: 0;
     line-height: 1.5;
     text-decoration: none!important;
-    color: #222;
+    color: #eaeaea;
     flex: 1;
   }
   .news-card:hover h6 {
@@ -155,4 +155,10 @@
     gap: 10px;
     text-decoration: none !important;
     color: #222!important;
+  }
+  .dark{
+    color: #cccccc!important;
+  }
+  .textGray{
+    color: #979797!important;
   }
